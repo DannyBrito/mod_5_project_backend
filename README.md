@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # README
 
 This README would normally document whatever steps are necessary to get the
@@ -22,3 +23,6 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+=======
+# mod_5_project_backend
+>>>>>>> 9342b7bbef049704e01f8f772233e19dc4c6bb36
