@@ -12,3 +12,7 @@ json.items @favorites do |favorite|
 end
 
 json.total total if @include_amounts
+
+if(@failed_to_adquired[:total] != 0)
+    json.failed_items @failed_to_adquired[:items]
+end

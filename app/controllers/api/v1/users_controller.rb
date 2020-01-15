@@ -57,6 +57,16 @@ class Api::V1::UsersController < ApplicationController
         render 'api/v1/listings/index'
     end
 
+     # POST -> users/:id/listings
+    def create_listing
+        @listing = @user.ownlistings.create(listing_params)
+        if(@listing.valid?)
+            render 'api/v1/listings/show'
+        else
+            render json:{message:'error creating listing'}
+        end
+    end
+
     private
 
     #strong user params
@@ -72,6 +82,11 @@ class Api::V1::UsersController < ApplicationController
     #set @user for same actions
     def find_user
         @user = User.find(params[:id])
+    end
+
+    #Listing Params 
+    def listing_params
+        params.require(:listing).permit(:title,:condition,:description,:price,:units)
     end
 end
  

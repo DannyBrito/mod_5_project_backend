@@ -1,11 +1,18 @@
 class Api::V1::ListingsController < ApplicationController
     before_action :find_listing, except: [:index,:create]
 
-    def index 
-        @listings = Listing.all
+    def index
+        if(params[:limit])
+            @listings = Listing.limit(params[:limit])
+        else
+            @listings = Listing.all
+        end
     end
 
     def show
+        if(!@listing) 
+            render json:{message:'listing not found'}
+        end
     end
 
     def create #concept implemented where you will be able to get user through authentification
@@ -36,7 +43,11 @@ class Api::V1::ListingsController < ApplicationController
     end
 
     def find_listing
-        @listing = Listing.find(params[:id])
+        begin
+            @listing = Listing.find(params[:id])
+        rescue => exception
+            @listing = nil
+        end
     end
     
 end
