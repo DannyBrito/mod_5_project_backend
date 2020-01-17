@@ -1,13 +1,26 @@
 class Api::V1::FavoritesController < ApplicationController
-    before_action :find_favorite, except: [:buy_adquire]
+    before_action :find_favorite, except: [:buy_adquire,:create]
 
     def show
+    end
+    
+    def create
+        @favorite = Favorite.create(favorite_params)
+        if(@favorite.valid?)
+            render 'api/v1/favorites/show'
+        else
+            render json: {message: 'error creating favorite'}, status: :not_acceptable
+        end
     end
 
     def update
         @favorite.update(favorite_params)
     end
 
+    def destroy
+        @favorite.destroy
+        render json: {fav_id:@favorite.id, message: 'favorite successful deleted'},status: :ok
+    end
     #gets an aray of ids to set them to adquire and update listing?
     def buy_adquire
         @favorites = []
@@ -37,7 +50,7 @@ class Api::V1::FavoritesController < ApplicationController
     private 
 
     def favorite_params
-        params.require(:favorite).permit(:in_cart,:adquired,:units) #will need to add in_fav
+        params.require(:favorite).permit(:user_id,:listing_id,:in_cart,:adquired,:units) #will need to add in_fav
     end
 
     def find_favorite

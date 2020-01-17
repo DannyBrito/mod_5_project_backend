@@ -1,5 +1,5 @@
 class Api::V1::ListingsController < ApplicationController
-    before_action :find_listing, except: [:index,:create]
+    before_action :find_listing, except: [:index,:create,:search]
 
     def index
         if(params[:limit])
@@ -35,6 +35,11 @@ class Api::V1::ListingsController < ApplicationController
         end
     end
 
+    #GET => /search/:q
+    def search
+        @listings = Listing.where("title ILIKE ?", "%#{params[:q]}%")
+        render 'api/v1/listings/index'
+    end
 
     private
 

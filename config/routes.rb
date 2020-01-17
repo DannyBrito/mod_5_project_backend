@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       post '/buy_adquire/:id', to: 'favorites#buy_adquire'
       post '/users/:id/listings', to: 'users#create_listing'
       post '/login', to: 'auth#create'
+      get '/search/:q', to: 'listings#search'
   
     end
   end
