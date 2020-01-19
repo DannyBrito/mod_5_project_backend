@@ -3,10 +3,19 @@ class Api::V1::ListingsController < ApplicationController
 
     def index
         if(params[:limit])
-            @listings = Listing.limit(params[:limit])
+            @listings = Listing.on_stock.limit(params[:limit])
         else
-            @listings = Listing.all
+            @listings = Listing.on_stock
         end
+    end
+
+    def index_out_stock
+        if(params[:limit])
+            @listings = Listing.out_stock.limit(params[:limit])
+        else
+            @listings = Listing.out_stock
+        end
+        render 'api/v1/listings/index'
     end
 
     def show
@@ -37,6 +46,7 @@ class Api::V1::ListingsController < ApplicationController
 
     #GET => /search/:q
     def search
+        # puts 'hreeeee' * 80
         @listings = Listing.where("title ILIKE ?", "%#{params[:q]}%")
         render 'api/v1/listings/index'
     end

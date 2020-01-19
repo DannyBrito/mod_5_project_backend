@@ -10,15 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_09_141338) do
+ActiveRecord::Schema.define(version: 2020_01_17_163852) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "carts", force: :cascade do |t|
+    t.integer "listing_id"
+    t.integer "user_id"
+    t.boolean "adquired", default: false
+    t.boolean "in_cart", default: true
+    t.float "price"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "favorites", force: :cascade do |t|
     t.integer "user_id"
     t.integer "units", default: 1
     t.boolean "in_cart", default: false
+    t.boolean "in_fav", default: true
     t.boolean "adquired", default: false
     t.integer "listing_id"
     t.datetime "created_at", precision: 6, null: false

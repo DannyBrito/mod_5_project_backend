@@ -24,3 +24,17 @@ end
 
 u1.ownlistings.create(title:'car',condition:'new', price:2000,units:1)
 u2.ownlistings.create(title:'iphone',condition:'brand new', price:1500,units:6)
+
+
+l1 = Listing.create(creator:u2,title:'phone',condition:'new',price:1200,on_stock:false)
+l2 = Listing.create(creator:u2,title:'phonex',condition:'old',price:2000)
+l3 = Listing.create(creator:u2,title:'ophone1',condition:'ok',price:20)
+l4 = Listing.create(creator:u2,title:'xhone2',condition:'poor',price:20000)
+l5 = Listing.create(creator:u2,title:'phcone3',condition:'new',price:110,on_stock:false)
+#art testing
+
+u1.carts.create(listing:l1,price:l1.price)
+u1.carts.create(listing:l2,price:l2.price)
+u1.carts.create(listing:l3,price:l3.price)
+u1.carts.create(listing:l4,price:l4.price)
+u1.carts.create(listing:l5,price:l5.price)
