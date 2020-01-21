@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-    before_action :find_user, except: [:index,:create]
+    before_action :find_user, except: [:index,:create,:testing]
 
     #------------------------------- ******** REST ******** -------------------------------#
     
@@ -67,37 +67,42 @@ class Api::V1::UsersController < ApplicationController
         @listings_to_update_ids = Listing.where(id:@listings_to_update_ids)
         @adquired_items = @user.cartlistings.where("carts.adquired = true")
         @own_listings = @user.ownlistings
+        @fav_listings = @user.favlistings
         @total = @listings_to_update_ids.sum(:price)
         render 'api/v1/carts/checkout'
         
     end
+    
     
     # users/:id/in_cart
     def in_cart
         @in_cart = @user.carts.where(in_cart:true)
         render 'api/v1/carts/index'
     end
-
+    
     # users/:id/adquired
     def adquired #already bought
         @in_cart = @user.carts.where(adquired:true)
         render 'api/v1/carts/index'
     end
-
-#------------------------------- ******** Listings ******** -------------------------------#
-
+    
+    #------------------------------- ******** Listings ******** -------------------------------#
+    
     #users/:id/listings
     def own_listings
         @listings = @user.ownlistings
         @no_seller = true
         render 'api/v1/listings/index'
     end
-
-     # POST -> users/:id/listings
+    
+    # POST -> users/:id/listings
     def create_listing
-        @listing = @user.ownlistings.create(listing_params)
+        @listing = @user.ownlistings.create(json_listing_params)
         if(@listing.valid?)
-            render 'api/v1/listings/show'
+            if(params[:photo])
+            @listing.listing_image.attach(io:File.open(photo_params.tempfile),filename:photo_params.original_filename,content_type:photo_params.content_type)
+            end
+            render "api/v1/listings/show"
         else
             render json:{message:'error creating listing'}
         end
@@ -121,8 +126,17 @@ class Api::V1::UsersController < ApplicationController
     end
 
     #Listing Params 
+
     def listing_params
         params.require(:listing).permit(:title,:condition,:description,:price,:units)
+    end
+
+    def json_listing_params
+        JSON.parse params[:listing]
+    end
+
+    def photo_params
+        params.require(:photo)
     end
 end
  

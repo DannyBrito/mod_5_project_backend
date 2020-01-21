@@ -10,16 +10,17 @@
 User.destroy_all
 Listing.destroy_all
 Favorite.destroy_all
+Cart.destroy_all
 
-u1 = User.create(username:'dan',password:'123')
-u2 = User.create(username:'rick',password:'123')
+u1 = User.create(username:'dan',password:'123', bio: Faker::Quote.most_interesting_man_in_the_world)
+u2 = User.create(username:'rick',password:'123',bio: Faker::Quote.most_interesting_man_in_the_world)
 u3 = User.create(username:'tim',password:'123')
 
 users = [u1,u2,u3]
 conditions = ['new','brand-new','fair','ok','poor']
-100.times do 
+20.times do 
 curUser = users.sample()
-curUser.ownlistings.create(title:Faker::Coffee.blend_name,condition:conditions.sample(),price:rand(20..2000),units:rand(1..20))
+curUser.ownlistings.create(title:Faker::Coffee.blend_name,condition:conditions.sample(),price:rand(20..2000),units:rand(1..20),description:Faker::Marketing.buzzwords)
 end
 
 u1.ownlistings.create(title:'car',condition:'new', price:2000,units:1)

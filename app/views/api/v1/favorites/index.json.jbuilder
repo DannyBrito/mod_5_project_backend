@@ -8,7 +8,13 @@ json.array! @favorites do |favorite|
     # else 
     #     # json.(favorite,:in_cart,:adquired)
     # end
-    json.(favorite.listing,:id,:title,:description,:price,:condition,:units,:image_url,:category,:on_stock)
+    json.(favorite.listing,:id,:title,:description,:price,:condition,:units,:category,:on_stock)
+
+    if(favorite.listing.listing_image.attached?) 
+        json.url favorite.listing.key_blob
+    else
+        json.url favorite.listing.image_url
+    end
     # json.(@listing,:id,:title,:on_stock,:condition,:description,:price,:category,:image_url)
 end
 

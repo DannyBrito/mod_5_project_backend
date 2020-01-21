@@ -2,7 +2,12 @@ json.total @in_cart.sum(:price)
 json.items @in_cart do |cart|
     json.cart_id cart.id
     json.listing_id cart.listing.id
-    json.(cart.listing,:title,:description,:price,:condition,:units,:image_url,:category,:on_stock)
+    json.(cart.listing,:title,:description,:price,:condition,:units,:category,:on_stock)
+    if(cart.listing.listing_image.attached?) 
+        json.url cart.listing.key_blob
+    else
+        json.url cart.listing.image_url
+    end  
 end
     # if(@include_amounts)
     #     json.subtotal (sub =cart.listing.price * cart.units)

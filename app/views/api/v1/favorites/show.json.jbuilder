@@ -7,4 +7,10 @@
 
 json.fav_id @favorite.id
 json.track_units @favorite.units
-json.(@favorite.listing,:id,:title,:description,:price,:condition,:units,:image_url,:category,:on_stock)
+json.(@favorite.listing,:id,:title,:description,:price,:condition,:units,:category,:on_stock)
+
+if(@favorite.listing.listing_image.attached?) 
+    json.url @favorite.listing.key_blob
+else
+    json.url @favorite.listing.image_url
+end

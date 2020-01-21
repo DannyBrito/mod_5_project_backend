@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       post '/login', to: 'auth#create'
       get '/search/:q', to: 'listings#search'
       get '/listings_out_stock', to:'listings#index_out_stock'
-      
+      post '/testing', to: 'users#testing'
     end
   end
 end
