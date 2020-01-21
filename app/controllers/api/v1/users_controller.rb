@@ -1,7 +1,7 @@
 class Api::V1::UsersController < ApplicationController
-    before_action :find_user, except: [:index,:create]
+    before_action :find_user, except: [:index,:create,:testing]
 
-    #------------------------------- ******** RESTFUL ******** -------------------------------#
+    #------------------------------- ******** REST ******** -------------------------------#
     
     def show 
         # @user
@@ -29,32 +29,83 @@ class Api::V1::UsersController < ApplicationController
         @user.update(user_params_update)
     end
 
-    #------------------------------- ******** Favorite ******** -------------------------------#
+#------------------------------- ******** Favorite ******** -------------------------------#
     
     # users/:id/favorites
     def favorite_index
         @favorites = @user.favorites #once db_created need to .where(in_fav:true)
         render 'api/v1/favorites/index'
     end
+    
+#------------------------------- ******** Cart ******** -------------------------------#
+    
 
+
+    def adquire_cart_items
+        @in_cart = @user.carts.where(in_cart:true) #adquire used to check if listing was already adquired by current user
+        @listings_from_cart = @user.cartlistings.where("carts.in_cart = true")
+        
+        #listings to update once bought
+
+        @listings_to_update = @listings_from_cart.where(on_stock:true)
+        @listings_to_update_ids = @listings_from_cart.where(on_stock:true).ids
+        @unavalible_listings_ids = @listings_from_cart.where(on_stock:false).ids
+        # @include_amounts = true
+        @in_cart.each do |cart|
+            if(cart.listing.on_stock)
+                cart.update(in_cart:false,adquired:true)
+                # cart.listing(on_stock:false)
+            else
+                cart.destroy
+            end
+        end
+
+        # need to go this way as using ones saved previously into variable it only references and reruns query
+        Listing.where(id:@listings_to_update_ids).update_all(on_stock:false)
+        @updatedListings = Listing.on_stock
+        @unavalible_listings = Listing.where(id:@unavalible_listings_ids)
+        @listings_to_update_ids = Listing.where(id:@listings_to_update_ids)
+        @adquired_items = @user.cartlistings.where("carts.adquired = true")
+        @own_listings = @user.ownlistings
+        @fav_listings = @user.favlistings
+        @total = @listings_to_update_ids.sum(:price)
+        render 'api/v1/carts/checkout'
+        
+    end
+    
+    
     # users/:id/in_cart
     def in_cart
-        @favorites = @user.favorites.where(in_cart:true,adquired:false) #adquire used to check if listing was already adquired by current user
-        @include_amounts = true
-        render 'api/v1/favorites/index'
+        @in_cart = @user.carts.where(in_cart:true)
+        render 'api/v1/carts/index'
     end
-
-    def adquired
-        @favorites = @user.favorites.where(adquired:true)
-        @include_amounts = true
-        render 'api/v1/favorites/index'
+    
+    # users/:id/adquired
+    def adquired #already bought
+        @in_cart = @user.carts.where(adquired:true)
+        render 'api/v1/carts/index'
     end
-
+    
+    #------------------------------- ******** Listings ******** -------------------------------#
+    
     #users/:id/listings
     def own_listings
         @listings = @user.ownlistings
         @no_seller = true
         render 'api/v1/listings/index'
+    end
+    
+    # POST -> users/:id/listings
+    def create_listing
+        @listing = @user.ownlistings.create(json_listing_params)
+        if(@listing.valid?)
+            if(params[:photo])
+            @listing.listing_image.attach(io:File.open(photo_params.tempfile),filename:photo_params.original_filename,content_type:photo_params.content_type)
+            end
+            render "api/v1/listings/show"
+        else
+            render json:{message:'error creating listing'}
+        end
     end
 
     private
@@ -72,6 +123,20 @@ class Api::V1::UsersController < ApplicationController
     #set @user for same actions
     def find_user
         @user = User.find(params[:id])
+    end
+
+    #Listing Params 
+
+    def listing_params
+        params.require(:listing).permit(:title,:condition,:description,:price,:units)
+    end
+
+    def json_listing_params
+        JSON.parse params[:listing]
+    end
+
+    def photo_params
+        params.require(:photo)
     end
 end
  

@@ -16,8 +16,12 @@ gem 'jbuilder', '~> 2.7' #if decided to do serializers
 # Use Active Model has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
+gem 'faker'
+
 #using enviroment variables
-gem 'dotenv-rails', groups: [:development, :test]
+gem 'dotenv-rails'
+
+gem 'cloudinary'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
