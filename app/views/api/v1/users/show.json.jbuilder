@@ -1,5 +1,5 @@
 #User Info
-json.user(@user,:id, :username, :area, :bio)
+json.user(@user,:id, :username, :area, :bio,:image_url)
 
 #User created Listings
 json.own_listing_number @user.ownlistings.count
