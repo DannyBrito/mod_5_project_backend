@@ -1,7 +1,7 @@
 
 # Eclone - App
 [Client](https://github.com/DannyBrito/Eclone-client)
-> An ecommerce app that allows users to quickly list and adquired items for sell. Inspired by letgot & ebay.
+> An eCommerce app that allows users to quickly list and acquired items for sell. Inspired by letgot & ebay.
 
 
 ## Features:
