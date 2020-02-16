@@ -13,7 +13,7 @@ Listing.destroy_all
 Favorite.destroy_all
 Cart.destroy_all
 
-u1 = User.create(username:'dan',password:'123', bio: Faker::Quote.most_interesting_man_in_the_world,image_url:"#{URL}profile/#{rand(1..7)}.jpg")
+u1 = User.create(username:'dan',password:'123', bio: Faker::Quote.most_interesting_man_in_the_world,image_url:"#{URL}profile/5.jpg")
 u2 = User.create(username:'rick',password:'123',bio: Faker::Quote.most_interesting_man_in_the_world,image_url:"#{URL}profile/#{rand(1..7)}.jpg")
 u3 = User.create(username:'tim',password:'123',image_url:"#{URL}profile/#{rand(1..7)}.jpg",bio: Faker::Quote.most_interesting_man_in_the_world)
 
@@ -81,3 +81,7 @@ u1.carts.create(listing:l2,price:l2.price)
 u1.carts.create(listing:l3,price:l3.price)
 u1.carts.create(listing:l4,price:l4.price)
 u1.carts.create(listing:l5,price:l5.price)
+
+u1.favorites.create(listing:l21)
+u1.favorites.create(listing:l15)
+u1.favorites.create(listing:l9)
