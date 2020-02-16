@@ -1,6 +1,6 @@
+
 # Eclone - App
 [Client](https://github.com/DannyBrito/Eclone-client)
-
 > An ecommerce app that allows users to quickly list and adquired items for sell. Inspired by letgot & ebay.
 
 
@@ -80,5 +80,4 @@ Ngrok used to temporally host API through tunneling.
 ## Meta
 
 Danny Brito – [LinkedIn](https://www.linkedin.com/in/dannybrito) - [Github](https://github.com/DannyBrito)
-
 
